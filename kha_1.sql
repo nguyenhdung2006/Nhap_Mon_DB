@@ -1,32 +1,24 @@
-CREATE TABLE products (
-                          id SERIAL PRIMARY KEY,
-                          name VARCHAR(100),
-                          price NUMERIC,
-                          last_modified TIMESTAMP
+CREATE table products (
+    id serial primary key ,
+    name varchar(255) not null,
+    price numeric(10, 2) not null,
+    last_modified timestamp not null default now()
 );
 
-CREATE OR REPLACE FUNCTION update_last_modified()
-    RETURNS TRIGGER AS
-$$
-BEGIN
-    NEW.last_modified = NOW();
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION trg_update_last_modified()
+RETURNS TRIGGER AS $$
+    BEGIN
+        new.last_modified = now();
+        return new;
+    end;
+$$ language plpgsql;
 
-CREATE TRIGGER trg_update_last_modified
-    BEFORE UPDATE ON products
-    FOR EACH ROW
+CREATE OR REPLACE TRIGGER update_last_modified_trigger
+BEFORE UPDATE
+ON products
+FOR EACH ROW
 EXECUTE FUNCTION update_last_modified();
 
-INSERT INTO products (name, price, last_modified)
-VALUES
-    ('Laptop', 1500, NOW()),
-    ('Mouse', 20, NOW()),
-    ('Keyboard', 50, NOW());
-
-UPDATE products
-SET price = 1600
-WHERE name = 'Laptop';
-
-SELECT * FROM products;
+Update products
+SET price = 3000
+WHERE name ='Iphone 15';
