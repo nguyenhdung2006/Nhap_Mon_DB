@@ -1,4 +1,8 @@
-ALTER TABLE products ADD COLUMN price NUMERIC;
+CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    price NUMERIC
+);
 
 CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
@@ -27,7 +31,7 @@ BEFORE INSERT ON orders
 FOR EACH ROW
 EXECUTE FUNCTION calculate_total_amount();
 
-INSERT INTO products (name, stock, price) VALUES ('C', 50, 10);
+INSERT INTO products (name, price) VALUES ('A', 10);
 
 INSERT INTO orders (product_id, quantity) VALUES (1, 3);
 
